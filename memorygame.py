@@ -8,7 +8,7 @@ def new_game():
     pass
 
 def sequence():
-    sample = random.sample(range(0,36),4)
+    sample = random.sample(range(0,36),6)
     for samp in sample:
 
         ind = sample.index(samp)+1
