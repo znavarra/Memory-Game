@@ -15,6 +15,7 @@ font = pygame.font.SysFont(None, 40)
 game_over_font = pygame.font.SysFont(None, 100)
 play_again_font = pygame.font.SysFont(None, 60)
 play_again_rect = Rect(300, 300, 300, 100)
+ready_rect = Rect(350, 500, 300, 100)
 
 hexes = {}
 clicked = {}
@@ -91,12 +92,20 @@ def is_point_in_polygon(point, polygon):
         px, py = nx, ny
     return inside
 
+def ready():
+    pygame.draw.rect(screen,blue,ready_rect)
+    ready_text = "Ready"
+    ready_img = play_again_font.render(ready_text, True, green)
+    screen.blit(ready_img, (430,530))
+    
 clicks = 0
 run = True
 number = 1
 game_over = False
+ready_click = False
 
 generate_polygons(number)
+ready()
 
 while run:
 
@@ -110,21 +119,34 @@ while run:
 
             pos = pygame.mouse.get_pos()
 
-            for hex in sample:
+            if ready_rect.collidepoint(pos) and ready_click == False:
+                
+                for hex in sample:
 
-                if is_point_in_polygon(pos, hexes[hex]) == True and clicked[hex] == False:
-                    
-                    clicks += 1
-                    if clicks == order[hex]:
-                        pygame.draw.polygon(screen,black,hexes[hex])
-                        clicked[hex] = True
+                    pygame.draw.polygon(screen,blue,hexes[hex])
+                
+                ready_click = True
+                pygame.draw.rect(screen,black,ready_rect)
 
-                    elif clicks != order[hex]:
-                        play_again()
+            if ready_click == True:
 
-                    if clicks == number:
-                        number += 1
-                        generate_polygons(number)
+                for hex in sample:
+
+                    if is_point_in_polygon(pos, hexes[hex]) == True and clicked[hex] == False:
+                        
+                        clicks += 1
+                        if clicks == order[hex]:
+                            pygame.draw.polygon(screen,black,hexes[hex])
+                            clicked[hex] = True
+
+                        elif clicks != order[hex]:
+                            play_again()
+
+                        if clicks == number:
+                            number += 1
+                            generate_polygons(number)
+                            ready_click = False
+                            ready()
 
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and game_over is True:
             
@@ -135,7 +157,9 @@ while run:
                 screen.fill(black)
                 number = 1
                 generate_polygons(number)
+                ready()
                 game_over = False
+                ready_click = False
     
 
     pygame.display.update()
