@@ -6,19 +6,21 @@ import math
 pygame.init()
 
 width = 1000
-height = 500
+height = 700
 blue = (0, 0, 255)
 red = (255, 0, 0)
 green = (0, 255, 0)
+black = (0, 0 , 0)
 font = pygame.font.SysFont(None, 40)
-
-r = 50
+game_over_font = pygame.font.SysFont(None, 100)
+play_again_font = pygame.font.SysFont(None, 60)
+play_again_rect = Rect(300, 300, 300, 100)
 
 hexes = {}
+clicked = {}
 order = {}
-
-sample = random.sample(range(0,52), 10)
-
+sample = []
+r = 50
 count = 0
 for k in range(5):
     
@@ -39,21 +41,44 @@ for k in range(5):
         ]
 
         hexes[count] = array
+        clicked[count] = False
         count += 1
 
 screen = pygame.display.set_mode((width,height))
 
-for hex in list(hexes.keys()):
-    if hex in sample:
-        pygame.draw.polygon(screen, blue, hexes[hex])
+def generate_polygons(num):
+    
+    global sample, order, clicks
 
-label = 1
-for samp in sample:
-    order[samp] = label
-    label_text = f"{label}"
-    label_img = font.render(label_text, True, green)
-    screen.blit(label_img, (hexes[samp][0][0] - 7, ((hexes[samp][1][1] + hexes[samp][2][1]) / 2) - 10))
-    label += 1
+    clicks = 0
+    order = {}
+    sample = []
+    sample = random.sample(range(0,52), num)
+
+    label = 1
+    for samp in sample: 
+        pygame.draw.polygon(screen, blue, hexes[samp]) #producing tiles
+        
+        order[samp] = label #producing tile numbers
+        label_text = f"{label}"
+        label_img = font.render(label_text, True, green)
+        screen.blit(label_img, (hexes[samp][0][0] - 7, ((hexes[samp][1][1] + hexes[samp][2][1]) / 2) - 10))
+        clicked[samp] = False
+        label += 1
+
+def play_again():
+    global game_over
+    screen.fill(black)
+    game_over_text = "Game Over"
+    game_over_img = game_over_font.render(game_over_text, True, red)
+    screen.blit(game_over_img, (300,150))
+
+    pygame.draw.rect(screen,red,play_again_rect)
+    play_again_text = "Play Again"
+    play_again_img = play_again_font.render(play_again_text, True, black)
+    screen.blit(play_again_img, (325,325))
+    game_over = True
+    
 
 def is_point_in_polygon(point, polygon):
     x, y = point
@@ -66,8 +91,13 @@ def is_point_in_polygon(point, polygon):
         px, py = nx, ny
     return inside
 
-
+clicks = 0
 run = True
+number = 1
+game_over = False
+
+generate_polygons(number)
+
 while run:
 
     for event in pygame.event.get():
@@ -82,22 +112,30 @@ while run:
 
             for hex in sample:
 
-                if is_point_in_polygon(pos, hexes[hex]) == True:
+                if is_point_in_polygon(pos, hexes[hex]) == True and clicked[hex] == False:
                     
-                    print("inside")
-                
-                elif is_point_in_polygon(pos, hexes[hex]) == False:
+                    clicks += 1
+                    if clicks == order[hex]:
+                        pygame.draw.polygon(screen,black,hexes[hex])
+                        clicked[hex] = True
 
-                    print("outside")
-                    # if colors[hex] == blue:
-                    #     color = red
-                    #     colors[hex] = color
-                    #     pygame.draw.polygon(screen, color, hexes[hex])
-                    # else:
-                    #     color = blue
-                    #     colors[hex] = color
-                    #     pygame.draw.polygon(screen, color, hexes[hex])
+                    elif clicks != order[hex]:
+                        play_again()
 
+                    if clicks == number:
+                        number += 1
+                        generate_polygons(number)
+
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and game_over is True:
+            
+            pos = pygame.mouse.get_pos()
+
+            if play_again_rect.collidepoint(pos):
+
+                screen.fill(black)
+                number = 1
+                generate_polygons(number)
+                game_over = False
     
 
     pygame.display.update()
