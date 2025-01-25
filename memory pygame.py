@@ -1,5 +1,7 @@
 import pygame
 from pygame.locals import *
+import random
+import math
 
 pygame.init()
 
@@ -7,48 +9,51 @@ width = 1000
 height = 500
 blue = (0, 0, 255)
 red = (255, 0, 0)
+green = (0, 255, 0)
+font = pygame.font.SysFont(None, 40)
 
-hex_points = [
-    (200, 250),  # Left middle
-    (225, 206.7),  # Top left
-    (275, 206.7),  # Top right
-    (300, 250),  # Right middle
-    (275, 293.3),  # Bottom right
-    (225, 293.3),  # Bottom left
-]
+r = 50
 
-hex_points1 = [
-    (200, 350),  # Left middle
-    (225, 306.7),  # Top left
-    (275, 306.7),  # Top right
-    (300, 350),  # Right middle
-    (275, 393.3),  # Bottom right
-    (225, 393.3),  # Bottom left
-]
+hexes = {}
+order = {}
 
-colors = {
-    0: blue,
-    1: blue,
-    2: blue,
-    3: blue,
-    4: blue,
-    5: blue
-}
+sample = random.sample(range(0,52), 10)
 
-hexes = {0: hex_points}
-count = 1
-
-for x in range(10):
-    params = []
-
-    for i in hex_points:
-        params.append((i[0] + (count *105),i[1]))
+count = 0
+for k in range(5):
     
-    hexes[count] = params
-    count += 1
+    if k%2 == 1:
+        x = 40
+        z = 11
+    else:
+        x = 85
+        z = 10
+    
+    for j in range(z):
+        array = [
+            (
+                round(x + 90*j + r * math.cos(math.pi / 3 * i - math.pi / 2),1),
+                round(96 + 77 * k + r * math.sin(math.pi / 3 * i - math.pi / 2),1)
+            )
+            for i in range(6)
+        ]
+
+        hexes[count] = array
+        count += 1
 
 screen = pygame.display.set_mode((width,height))
 
+for hex in list(hexes.keys()):
+    if hex in sample:
+        pygame.draw.polygon(screen, blue, hexes[hex])
+
+label = 1
+for samp in sample:
+    order[samp] = label
+    label_text = f"{label}"
+    label_img = font.render(label_text, True, green)
+    screen.blit(label_img, (hexes[samp][0][0] - 7, ((hexes[samp][1][1] + hexes[samp][2][1]) / 2) - 10))
+    label += 1
 
 def is_point_in_polygon(point, polygon):
     x, y = point
@@ -61,16 +66,8 @@ def is_point_in_polygon(point, polygon):
         px, py = nx, ny
     return inside
 
+
 run = True
-color = blue
-
-#pygame.draw.polygon(screen, color, hex_points)
-
-for hex in list(hexes.keys()):
-    pygame.draw.polygon(screen, color, hexes[hex])
-
-pygame.draw.polygon(screen, color, hex_points1)
-
 while run:
 
     for event in pygame.event.get():
@@ -83,18 +80,23 @@ while run:
 
             pos = pygame.mouse.get_pos()
 
-            for hex in list(hexes.keys()):
+            for hex in sample:
 
                 if is_point_in_polygon(pos, hexes[hex]) == True:
+                    
+                    print("inside")
+                
+                elif is_point_in_polygon(pos, hexes[hex]) == False:
 
-                    if colors[hex] == blue:
-                        color = red
-                        colors[hex] = color
-                        pygame.draw.polygon(screen, color, hexes[hex])
-                    else:
-                        color = blue
-                        colors[hex] = color
-                        pygame.draw.polygon(screen, color, hexes[hex])
+                    print("outside")
+                    # if colors[hex] == blue:
+                    #     color = red
+                    #     colors[hex] = color
+                    #     pygame.draw.polygon(screen, color, hexes[hex])
+                    # else:
+                    #     color = blue
+                    #     colors[hex] = color
+                    #     pygame.draw.polygon(screen, color, hexes[hex])
 
     
 
