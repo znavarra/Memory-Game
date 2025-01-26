@@ -19,7 +19,6 @@ play_again_rect = Rect(300, 400, 300, 100)
 ready_rect = Rect(350, 500, 300, 100)
 score_rect = Rect(50,525,300,100)
 
-
 hexes = {}
 clicked = {}
 order = {}
@@ -113,12 +112,30 @@ def score(clicks):
     score_text = f"Score: {clicks}"
     score_img = score_font.render(score_text, True, blue)
     screen.blit(score_img, (50,525))
+
+def strikes():
+    global strike, ready_click, scored, strike_state
+    strike += 1
+    screen.fill(black)
+
+    strike_text = f"Strike {strike}"
+    strike_img = game_over_font.render(strike_text, True, red)
+    screen.blit(strike_img, (450,300))
+    
+    score(scored)
+
+    if strike == 3:
+        strike_state = False
+        play_again()
+    
     
 clicks = 0
 run = True
 number = 1
 game_over = False
 ready_click = False
+strike = 0
+strike_state = False
 
 generate_polygons(number)
 ready()
@@ -144,7 +161,7 @@ while run:
                 ready_click = True
                 pygame.draw.rect(screen,black,ready_rect)
 
-            if ready_click == True:
+            if ready_click == True and strike_state == False:
 
                 for hex in sample:
 
@@ -156,7 +173,8 @@ while run:
                             clicked[hex] = True
 
                         elif clicks != order[hex]:
-                            play_again()
+                                strikes()
+                                strike_state = True
 
                         if clicks == number:
                             number += 1
@@ -164,6 +182,21 @@ while run:
                             generate_polygons(number)
                             ready_click = False
                             ready()
+
+            if strike_state == True and game_over is False:
+
+                pygame.draw.rect(screen,blue,ready_rect)
+                continue_text = "Continue"
+                continue_img = play_again_font.render(continue_text, True, green)
+                screen.blit(continue_img, (430,530))
+
+                if ready_rect.collidepoint(pos):
+                    strike_state = False
+                    ready_click = False
+                    screen.fill(black)
+                    score(scored)
+                    generate_polygons(number)
+                    ready()
 
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and game_over is True:
             
@@ -177,6 +210,7 @@ while run:
                 ready()
                 game_over = False
                 ready_click = False
+                strike = 0
     
 
     pygame.display.update()
