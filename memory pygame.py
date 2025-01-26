@@ -12,15 +12,19 @@ red = (255, 0, 0)
 green = (0, 255, 0)
 black = (0, 0 , 0)
 font = pygame.font.SysFont(None, 40)
+score_font = pygame.font.SysFont(None, 60)
 game_over_font = pygame.font.SysFont(None, 100)
 play_again_font = pygame.font.SysFont(None, 60)
-play_again_rect = Rect(300, 300, 300, 100)
+play_again_rect = Rect(300, 400, 300, 100)
 ready_rect = Rect(350, 500, 300, 100)
+score_rect = Rect(50,525,300,100)
+
 
 hexes = {}
 clicked = {}
 order = {}
 sample = []
+scored = 0
 r = 50
 count = 0
 for k in range(5):
@@ -71,13 +75,17 @@ def play_again():
     global game_over
     screen.fill(black)
     game_over_text = "Game Over"
+    final_score_text = f"Final Score: {scored}"
     game_over_img = game_over_font.render(game_over_text, True, red)
+    final_score_img = game_over_font.render(final_score_text, True, red)
     screen.blit(game_over_img, (300,150))
+    screen.blit(final_score_img, (200,225))
+
 
     pygame.draw.rect(screen,red,play_again_rect)
     play_again_text = "Play Again"
     play_again_img = play_again_font.render(play_again_text, True, black)
-    screen.blit(play_again_img, (325,325))
+    screen.blit(play_again_img, (325,425))
     game_over = True
     
 
@@ -97,6 +105,14 @@ def ready():
     ready_text = "Ready"
     ready_img = play_again_font.render(ready_text, True, green)
     screen.blit(ready_img, (430,530))
+
+def score(clicks):
+    global scored
+    scored = clicks
+    pygame.draw.rect(screen,black,score_rect)
+    score_text = f"Score: {clicks}"
+    score_img = score_font.render(score_text, True, blue)
+    screen.blit(score_img, (50,525))
     
 clicks = 0
 run = True
@@ -144,6 +160,7 @@ while run:
 
                         if clicks == number:
                             number += 1
+                            score(clicks)
                             generate_polygons(number)
                             ready_click = False
                             ready()
