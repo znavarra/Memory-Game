@@ -7,10 +7,15 @@ pygame.init()
 
 width = 1000
 height = 700
+screen = pygame.display.set_mode((width,height))
+
 blue = (0, 0, 255)
 red = (255, 0, 0)
 green = (0, 255, 0)
 black = (0, 0 , 0)
+pink = (255, 16, 240)
+
+clock = pygame.time.Clock()
 font = pygame.font.SysFont(None, 40)
 score_font = pygame.font.SysFont(None, 60)
 game_over_font = pygame.font.SysFont(None, 100)
@@ -19,6 +24,7 @@ play_again_rect = Rect(300, 400, 300, 100)
 ready_rect = Rect(350, 500, 300, 100)
 score_rect = Rect(50,525,300,100)
 
+time = []
 hexes = {}
 clicked = {}
 order = {}
@@ -26,6 +32,7 @@ sample = []
 scored = 0
 r = 50
 count = 0
+
 for k in range(5):
     
     if k%2 == 1:
@@ -48,7 +55,7 @@ for k in range(5):
         clicked[count] = False
         count += 1
 
-screen = pygame.display.set_mode((width,height))
+
 
 def generate_polygons(num):
     
@@ -127,11 +134,18 @@ def strikes():
     if strike == 3:
         strike_state = False
         play_again()
-    
+
+def timer():
+    current_time = pygame.time.get_ticks()
+    duration = current_time - start_time
+    ready_time = [duration,scored]
+    time.append(ready_time)
     
 clicks = 0
+start_time = 0
+current_time = 0
 run = True
-number = 1
+number = 4
 game_over = False
 ready_click = False
 strike = 0
@@ -153,6 +167,8 @@ while run:
             pos = pygame.mouse.get_pos()
 
             if ready_rect.collidepoint(pos) and ready_click == False:
+
+                timer()
                 
                 for hex in sample:
 
@@ -178,6 +194,7 @@ while run:
 
                         if clicks == number:
                             number += 1
+                            start_time = pygame.time.get_ticks()
                             score(clicks)
                             generate_polygons(number)
                             ready_click = False
@@ -191,6 +208,7 @@ while run:
                 screen.blit(continue_img, (430,530))
 
                 if ready_rect.collidepoint(pos):
+                    start_time = pygame.time.get_ticks()
                     strike_state = False
                     ready_click = False
                     screen.fill(black)
@@ -205,14 +223,17 @@ while run:
             if play_again_rect.collidepoint(pos):
 
                 screen.fill(black)
-                number = 1
+                number = 4
                 generate_polygons(number)
                 ready()
                 game_over = False
                 ready_click = False
                 strike = 0
+                start_time = 0
     
 
     pygame.display.update()
 
 pygame.quit()
+
+print(time)
