@@ -6,7 +6,7 @@ import math
 pygame.init()
 
 width = 1000
-height = 700
+height = 650
 screen = pygame.display.set_mode((width,height))
 
 blue = (0, 0, 255)
@@ -21,8 +21,11 @@ score_font = pygame.font.SysFont(None, 60)
 game_over_font = pygame.font.SysFont(None, 100)
 play_again_font = pygame.font.SysFont(None, 60)
 play_again_rect = Rect(300, 400, 300, 100)
+game_screen_rect = Rect(95,47.5,815,415)
 ready_rect = Rect(350, 500, 300, 100)
 score_rect = Rect(50,525,300,100)
+
+pygame.draw.rect(screen,pink,game_screen_rect)
 
 time = []
 hexes = {}
@@ -36,17 +39,17 @@ count = 0
 for k in range(5):
     
     if k%2 == 1:
-        x = 40
-        z = 11
+        x = 187.5
+        z = 8
     else:
-        x = 85
-        z = 10
+        x = 142.5
+        z = 9
     
     for j in range(z):
         array = [
             (
                 round(x + 90*j + r * math.cos(math.pi / 3 * i - math.pi / 2),1),
-                round(96 + 77 * k + r * math.sin(math.pi / 3 * i - math.pi / 2),1)
+                round(100 + 77 * k + r * math.sin(math.pi / 3 * i - math.pi / 2),1)
             )
             for i in range(6)
         ]
@@ -57,14 +60,14 @@ for k in range(5):
 
 
 
-def generate_polygons(num):
+def generate_polygons(num): 
     
     global sample, order, clicks
 
     clicks = 0
     order = {}
     sample = []
-    sample = random.sample(range(0,52), num)
+    sample = random.sample(range(0,43), num)
 
     label = 1
     for samp in sample: 
@@ -145,7 +148,7 @@ clicks = 0
 start_time = 0
 current_time = 0
 run = True
-number = 4
+number = 43
 game_over = False
 ready_click = False
 strike = 0
@@ -165,6 +168,7 @@ while run:
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
 
             pos = pygame.mouse.get_pos()
+            print(pos)
 
             if ready_rect.collidepoint(pos) and ready_click == False:
 
