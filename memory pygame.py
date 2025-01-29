@@ -14,18 +14,20 @@ red = (255, 0, 0)
 green = (0, 255, 0)
 black = (0, 0 , 0)
 pink = (255, 16, 240)
+white = (250,250,250)
 
 clock = pygame.time.Clock()
 font = pygame.font.SysFont(None, 40)
 score_font = pygame.font.SysFont(None, 60)
 game_over_font = pygame.font.SysFont(None, 100)
 play_again_font = pygame.font.SysFont(None, 60)
-play_again_rect = Rect(300, 400, 300, 100)
+#play_again_rect = Rect(300, 400, 300, 100) old play again rectangle
+play_again_rect = Rect(350, 500, 300, 100)
 game_screen_rect = Rect(95,47.5,815,415)
 ready_rect = Rect(350, 500, 300, 100)
 score_rect = Rect(50,525,300,100)
 
-pygame.draw.rect(screen,pink,game_screen_rect)
+pygame.draw.rect(screen,white,game_screen_rect)
 
 time = []
 hexes = {}
@@ -87,14 +89,14 @@ def play_again():
     final_score_text = f"Final Score: {scored}"
     game_over_img = game_over_font.render(game_over_text, True, red)
     final_score_img = game_over_font.render(final_score_text, True, red)
-    screen.blit(game_over_img, (300,150))
-    screen.blit(final_score_img, (200,225))
+    screen.blit(game_over_img, (310,150))
+    screen.blit(final_score_img, (273.5,225))
 
 
     pygame.draw.rect(screen,red,play_again_rect)
     play_again_text = "Play Again"
     play_again_img = play_again_font.render(play_again_text, True, black)
-    screen.blit(play_again_img, (325,425))
+    screen.blit(play_again_img, (395,530))
     game_over = True
     
 
@@ -113,7 +115,7 @@ def ready():
     pygame.draw.rect(screen,blue,ready_rect)
     ready_text = "Ready"
     ready_img = play_again_font.render(ready_text, True, green)
-    screen.blit(ready_img, (430,530))
+    screen.blit(ready_img, (435,530))
 
 def score(clicks):
     global scored
@@ -130,7 +132,7 @@ def strikes():
 
     strike_text = f"Strike {strike}"
     strike_img = game_over_font.render(strike_text, True, red)
-    screen.blit(strike_img, (450,300))
+    screen.blit(strike_img, (375,200))
     
     score(scored)
 
@@ -148,13 +150,14 @@ clicks = 0
 start_time = 0
 current_time = 0
 run = True
-number = 43
+number = 4
 game_over = False
 ready_click = False
 strike = 0
 strike_state = False
 
 generate_polygons(number)
+score(0)
 ready()
 
 while run:
@@ -168,7 +171,7 @@ while run:
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
 
             pos = pygame.mouse.get_pos()
-            print(pos)
+            #print(pos)
 
             if ready_rect.collidepoint(pos) and ready_click == False:
 
@@ -189,7 +192,7 @@ while run:
                         
                         clicks += 1
                         if clicks == order[hex]:
-                            pygame.draw.polygon(screen,black,hexes[hex])
+                            pygame.draw.polygon(screen,white,hexes[hex])
                             clicked[hex] = True
 
                         elif clicks != order[hex]:
@@ -209,13 +212,14 @@ while run:
                 pygame.draw.rect(screen,blue,ready_rect)
                 continue_text = "Continue"
                 continue_img = play_again_font.render(continue_text, True, green)
-                screen.blit(continue_img, (430,530))
+                screen.blit(continue_img, (407.5,530))
 
                 if ready_rect.collidepoint(pos):
                     start_time = pygame.time.get_ticks()
                     strike_state = False
                     ready_click = False
                     screen.fill(black)
+                    pygame.draw.rect(screen,white,game_screen_rect)
                     score(scored)
                     generate_polygons(number)
                     ready()
@@ -227,11 +231,14 @@ while run:
             if play_again_rect.collidepoint(pos):
 
                 screen.fill(black)
+                pygame.draw.rect(screen,white,game_screen_rect)
+                score(0)
                 number = 4
                 generate_polygons(number)
                 ready()
                 game_over = False
                 ready_click = False
+                strike_state = False
                 strike = 0
                 start_time = 0
     
