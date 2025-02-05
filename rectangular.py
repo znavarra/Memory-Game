@@ -5,10 +5,13 @@ import math
 
 pygame.init()
 
+# Fix scoring mechanism when first round is failed
+
 width = 1000
 height = 650
 screen = pygame.display.set_mode((width,height))
 
+#Colors
 blue = (0, 0, 255)
 red = (255, 0, 0)
 green = (0, 255, 0)
@@ -16,18 +19,22 @@ black = (0, 0 , 0)
 pink = (255, 16, 240)
 white = (250,250,250)
 
+#Global Variables
 sample = []
 order = {}
 clicked = {}
 clicks = 0
 ready_click = False
+game_over = False
+number = 4
+strike = 0
+strike_state = False
 
 clock = pygame.time.Clock()
 font = pygame.font.SysFont(None,40)
 score_font = pygame.font.SysFont(None, 60)
 game_over_font = pygame.font.SysFont(None, 100)
 play_again_font = pygame.font.SysFont(None, 60)
-#play_again_rect = Rect(300, 400, 300, 100) old play again rectangle
 play_again_rect = Rect(350, 500, 300, 100)
 game_screen_rect = Rect(95,47.5,815,406)
 ready_rect = Rect(350, 500, 300, 100)
@@ -56,10 +63,11 @@ for k in range(5):
         j += 1
 
 def generate_polygons():
-    global sample, order, clicks
-    clicks = 0
-    sample = random.sample(range(0,50), 5)
+    global sample, order, clicked
+    sample = []
     order = {}
+    clicked = {}
+    sample = random.sample(range(0,50), number)
 
     label = 1
     for samp in sample:
@@ -88,6 +96,34 @@ def ready():
     ready_img = play_again_font.render(ready_text, True, green)
     screen.blit(ready_img, (435,530))
 
+def play_again():
+    global game_over
+    screen.fill(black)
+    game_over_text = "Game Over"
+    game_over_img = game_over_font.render(game_over_text, True, red)
+    screen.blit(game_over_img, (310,150))
+    final_score_text = f"Final Score: {number - 1}"
+    final_score_img = game_over_font.render(final_score_text, True, red)
+    screen.blit(final_score_img, (273.5,225))
+    game_over = True
+
+def score():
+    pygame.draw.rect(screen, black, score_rect)
+    score_text = f"Score: {number}"
+    score_img = score_font.render(score_text, True, blue)
+    screen.blit(score_img, (50, 525))
+
+def strikes():
+    global strike
+    strike += 1
+    screen.fill(black)
+
+    strike_text = f"Strike {strike}"
+    strike_img = game_over_font.render(strike_text, True, blue)
+    screen.blit(strike_img, (375,200))
+    if strike == 3:
+        play_again()
+
 generate_polygons()
 ready()
 
@@ -115,10 +151,38 @@ while run:
                         clicks += 1
                         clicked[samp] = True
                         if clicks == order[samp]:
-                            print("in order")
+                            pygame.draw.polygon(screen, white, rectangles[samp])
+                            clicked[samp] == True
                         else:
-                            print(clicks)
-                        pygame.draw.polygon(screen, white, rectangles[samp])
+                            ready_click = False
+                            clicks = 0
+                            strikes()
+                            strike_state = True
+
+                if clicks == number:
+                    ready_click = False
+                    clicks = 0
+                    score()
+                    number += 1
+                    ready()
+                    generate_polygons()
+
+            if strike_state == True and game_over == False:
+
+                pygame.draw.rect(screen,blue,ready_rect)
+                continue_text = "Continue"
+                continue_img = play_again_font.render(continue_text, True, green)
+                screen.blit(continue_img, (407.5,530))
+
+                if ready_rect.collidepoint(pos):
+                    strike_state = False
+                    ready_click = False
+                    screen.fill(black)
+                    pygame.draw.rect(screen,white,game_screen_rect)
+                    score()
+                    generate_polygons()
+                    ready()
+                    
 
     pygame.display.update()
 
