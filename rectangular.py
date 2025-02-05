@@ -16,6 +16,12 @@ black = (0, 0 , 0)
 pink = (255, 16, 240)
 white = (250,250,250)
 
+sample = []
+order = {}
+clicked = {}
+clicks = 0
+ready_click = False
+
 clock = pygame.time.Clock()
 font = pygame.font.SysFont(None,40)
 score_font = pygame.font.SysFont(None, 60)
@@ -50,14 +56,40 @@ for k in range(5):
         j += 1
 
 def generate_polygons():
-    sample = random.sample(range(0,50), 50)
+    global sample, order, clicks
+    clicks = 0
+    sample = random.sample(range(0,50), 5)
+    order = {}
 
+    label = 1
     for samp in sample:
         pygame.draw.polygon(screen,blue,rectangles[samp])
+        order[samp] = label
+        clicked[samp] = False
+        label_text = f"{label}"
+        label_img = font.render(label_text, True, green)
+        screen.blit(label_img, (rectangles[samp][0][0]+30, ((rectangles[samp][1][1] + rectangles[samp][2][1])/2) - 10))
+        label += 1
 
+def is_point_in_polygon(point,polygon):
+    x, y = point
+    inside = False
+    px, py = polygon[-1]
+    for nx, ny in polygon:
+        if (ny > y) != (py > y):
+            if x < (nx - px) * (y - py) / (ny - py + 1e-10) + px:
+                inside = not inside
+        px, py = nx, ny
+    return inside
 
+def ready():
+    pygame.draw.rect(screen, blue, ready_rect)
+    ready_text = "Ready"
+    ready_img = play_again_font.render(ready_text, True, green)
+    screen.blit(ready_img, (435,530))
 
 generate_polygons()
+ready()
 
 run = True
 while run:
@@ -67,7 +99,28 @@ while run:
             run = False
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             pos = pygame.mouse.get_pos()
-            print(pos)
+
+            if ready_rect.collidepoint(pos) and ready_click == False:
+
+                for samp in sample:
+                    pygame.draw.polygon(screen,blue,rectangles[samp])
+                    
+                ready_click = True
+            
+            if ready_click == True:
+                for samp in sample:
+                    val = is_point_in_polygon(pos,rectangles[samp])
+
+                    if val == True and clicked[samp] == False:
+                        clicks += 1
+                        clicked[samp] = True
+                        if clicks == order[samp]:
+                            print("in order")
+                        else:
+                            print(clicks)
+                        pygame.draw.polygon(screen, white, rectangles[samp])
+
     pygame.display.update()
 
 pygame.quit()
+
