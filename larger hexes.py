@@ -150,7 +150,7 @@ clicks = 0
 start_time = 0
 current_time = 0
 run = True
-number = 28
+number = 4
 game_over = False
 ready_click = False
 strike = 0
@@ -171,7 +171,7 @@ while run:
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
 
             pos = pygame.mouse.get_pos()
-            print(pos)
+            #print(pos)
 
             if ready_rect.collidepoint(pos) and ready_click == False:
 
