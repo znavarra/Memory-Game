@@ -83,56 +83,49 @@ score_rect = Rect(50,525,300,100)
 pygame.draw.rect(screen,white,game_screen_rect)
 
 time = []
-hexes = {}
 clicked = {}
 order = {}
 sample = []
 scored = 0
-r = 60
-count = 0
 
+start_x = 100
+start_y = 55.5
+length = 75*1.25
+gap = 81.2*1.25
+
+rectangles = {}
+
+j = 0
 for k in range(4):
-    
-    if k%2 == 1:
-        x = 172.5 * 1.2
-        z = 7
-    else:
-        x = 127.5 * 1.2
-        z = 7
-    
-    for j in range(z):
+    for i in range(8):
         array = [
-            (
-                round(x + 108*j + r * math.cos(math.pi / 3 * i - math.pi / 2),1),
-                round(113.5 + 92.4 * k + r * math.sin(math.pi / 3 * i - math.pi / 2),1)
-            )
-            for i in range(6)
+            (start_x + gap*i, start_y + gap*k),
+            (start_x + length + gap*i, start_y + gap*k),
+            (start_x + length + gap*i, start_y + length + gap*k),
+            (start_x + gap*i, start_y + length + gap*k)
         ]
 
-        hexes[count] = array
-        clicked[count] = False
-        count += 1
+        rectangles[j] = array
+        j += 1
 
 
-def generate_polygons(num): 
-    
+
+def generate_polygons(number):
     global sample, order, clicks, correct
-
     clicks = 0
     correct = 0
     order = {}
     sample = []
-    sample = random.sample(range(0,28), num)
+    sample = random.sample(range(0,32), number)
 
     label = 1
-    for samp in sample: 
-        pygame.draw.polygon(screen, color_dict[samp], hexes[samp]) #producing tiles
-        
-        order[samp] = label #producing tile numbers
+    for samp in sample:
+        pygame.draw.polygon(screen,color_dict[samp],rectangles[samp])
+        order[samp] = label
+        clicked[samp] = False
         label_text = f"{label}"
         label_img = font.render(label_text, True, white)
-        screen.blit(label_img, (hexes[samp][0][0] - 7, ((hexes[samp][1][1] + hexes[samp][2][1]) / 2) - 10))
-        clicked[samp] = False
+        screen.blit(label_img, (rectangles[samp][0][0]+40, ((rectangles[samp][1][1] + rectangles[samp][2][1])/2) - 10))
         label += 1
 
 def play_again():
@@ -227,7 +220,7 @@ while run:
                 
                 for hex in sample:
 
-                    pygame.draw.polygon(screen,color_dict[hex],hexes[hex])
+                    pygame.draw.polygon(screen,color_dict[hex],rectangles[hex])
                 
                 ready_click = True
                 pygame.draw.rect(screen,black,ready_rect)
@@ -236,16 +229,16 @@ while run:
 
                 for hex in sample:
 
-                    if is_point_in_polygon(pos, hexes[hex]) == True and clicked[hex] == False:
+                    if is_point_in_polygon(pos, rectangles[hex]) == True and clicked[hex] == False:
                         
                         clicks += 1
                         if clicks == order[hex]:
-                            pygame.draw.polygon(screen,white,hexes[hex])
+                            pygame.draw.polygon(screen,white,rectangles[hex])
                             clicked[hex] = True
                             correct += 1
                         
                         if clicks != order[hex]:
-                            pygame.draw.polygon(screen,white,hexes[hex])
+                            pygame.draw.polygon(screen,white,rectangles[hex])
 
                         if clicks == number:
                             if correct == clicks:

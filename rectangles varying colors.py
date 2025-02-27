@@ -19,12 +19,12 @@ white = (250,250,250)
 color_dict = {
     0: (204, 0, 102),   # Raspberry
     1: (255, 0, 0),     # Red
-    2: (0, 255, 0),     # Green
+    2: (0, 128, 0),     # Dark Green
     3: (0, 0, 255),     # Blue
-    4: (255, 255, 0),   # Yellow
+    4: (255, 223, 0),  # Golden Yellow
     5: (255, 165, 0),   # Orange
     6: (128, 0, 128),   # Purple
-    7: (0, 255, 255),   # Cyan
+    7: (160, 82, 45),  # Saddle Brown
     8: (255, 0, 255),   # Magenta
     9: (0, 128, 0),     # Dark Green
     10: (128, 0, 0),    # Dark Red
@@ -61,7 +61,7 @@ color_dict = {
     41: (128, 128, 128),# Gray
     42: (105, 105, 105),# Dark Gray
     43: (192, 192, 192),# Silver
-    44: (0, 255, 191),  # Aqua
+    44: (0, 0, 128),    # Dark Blue
     45: (255, 153, 51), # Saffron
     46: (153, 50, 204), # Dark Orchid
     47: (0, 153, 153),  # Deep Teal

@@ -88,23 +88,25 @@ clicked = {}
 order = {}
 sample = []
 scored = 0
-r = 60
+r = 50
 count = 0
 
-for k in range(4):
+
+
+for k in range(5):
     
     if k%2 == 1:
-        x = 172.5 * 1.2
-        z = 7
+        x = 187.5
+        z = 8
     else:
-        x = 127.5 * 1.2
-        z = 7
+        x = 142.5
+        z = 9
     
     for j in range(z):
         array = [
             (
-                round(x + 108*j + r * math.cos(math.pi / 3 * i - math.pi / 2),1),
-                round(113.5 + 92.4 * k + r * math.sin(math.pi / 3 * i - math.pi / 2),1)
+                round(x + 90*j + r * math.cos(math.pi / 3 * i - math.pi / 2),1),
+                round(100 + 77 * k + r * math.sin(math.pi / 3 * i - math.pi / 2),1)
             )
             for i in range(6)
         ]
@@ -112,7 +114,6 @@ for k in range(4):
         hexes[count] = array
         clicked[count] = False
         count += 1
-
 
 def generate_polygons(num): 
     
@@ -122,7 +123,7 @@ def generate_polygons(num):
     correct = 0
     order = {}
     sample = []
-    sample = random.sample(range(0,28), num)
+    sample = random.sample(range(0,43), num)
 
     label = 1
     for samp in sample: 
