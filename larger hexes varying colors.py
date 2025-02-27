@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *
 import random
 import math
+import runpy
 
 pygame.init()
 
@@ -213,6 +214,7 @@ while run:
     for event in pygame.event.get():
 
         if event.type == pygame.QUIT:
+            runpy.run_path("C:\\Users\\Zeddrex Navarra\\Desktop\\Career\\Projects\\Memory Game\\Memory-Game\\landing page.py")
             run = False
 
         #if event.type == pygame.mouse.get_pressed()[0] == True:
