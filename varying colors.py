@@ -108,8 +108,6 @@ for k in range(5):
         clicked[count] = False
         count += 1
 
-
-
 def generate_polygons(num): 
     
     global sample, order, clicks, correct
