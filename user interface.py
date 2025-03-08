@@ -60,8 +60,12 @@ while run:
                 unique_id = name + email
                 data["unique_id"] = unique_id
 
+                config_data = {
+                    "unique_id" : unique_id
+                }
+
                 with open("config.py", "w") as config_file:
-                    config_file.write(f"{unique_id}")
+                    config_file.write(f"CONFIG = {config_data}")
 
                 new_row = pd.DataFrame([data])
                 file = pd.concat([file, new_row], ignore_index = True)

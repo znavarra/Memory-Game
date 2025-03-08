@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 import runpy
+import config
 
 pygame.init()
 
@@ -73,35 +74,67 @@ while run:
             pos = pygame.mouse.get_pos()
 
             if choice1_rect.collidepoint(pos):
-                runpy.run_path("C:\\Users\\Zeddrex Navarra\\Desktop\\Career\\Projects\\Memory Game\\Memory-Game\\hexes.py")
+                config.CONFIG["treatment"] = 1
+                config_data = config.CONFIG
+                with open("config.py", "w") as config_file:
+                    config_file.write(f"CONFIG = {config_data}")
+                runpy.run_path("hexes.py")
                 pygame.quit()
 
             if choice2_rect.collidepoint(pos):
-                runpy.run_path("C:\\Users\\Zeddrex Navarra\\Desktop\\Career\\Projects\\Memory Game\\Memory-Game\\rectangles.py")
+                config.CONFIG["treatment"] = 2
+                config_data = config.CONFIG
+                with open("config.py", "w") as config_file:
+                    config_file.write(f"CONFIG = {config_data}")
+                runpy.run_path("rectangles.py")
                 pygame.quit()
 
             if choice3_rect.collidepoint(pos):
-                runpy.run_path("C:\\Users\\Zeddrex Navarra\\Desktop\\Career\\Projects\\Memory Game\\Memory-Game\\larger hexes.py")
+                config.CONFIG["treatment"] = 3
+                config_data = config.CONFIG
+                with open("config.py", "w") as config_file:
+                    config_file.write(f"CONFIG = {config_data}")
+                runpy.run_path("larger hexes.py")
                 pygame.quit()
 
             if choice4_rect.collidepoint(pos):
-                runpy.run_path("C:\\Users\\Zeddrex Navarra\\Desktop\\Career\\Projects\\Memory Game\\Memory-Game\\larger rectangles.py")
+                config.CONFIG["treatment"] = 4
+                config_data = config.CONFIG
+                with open("config.py", "w") as config_file:
+                    config_file.write(f"CONFIG = {config_data}")
+                runpy.run_path("larger rectangles.py")
                 pygame.quit()
 
             if choice5_rect.collidepoint(pos):
-                runpy.run_path("C:\\Users\\Zeddrex Navarra\\Desktop\\Career\\Projects\\Memory Game\\Memory-Game\\hexes varying colors.py")
+                config.CONFIG["treatment"] = 5
+                config_data = config.CONFIG
+                with open("config.py", "w") as config_file:
+                    config_file.write(f"CONFIG = {config_data}")
+                runpy.run_path("hexes varying colors.py")
                 pygame.quit()
 
             if choice6_rect.collidepoint(pos):
-                runpy.run_path("C:\\Users\\Zeddrex Navarra\\Desktop\\Career\\Projects\\Memory Game\\Memory-Game\\rectangles varying colors.py")
+                config.CONFIG["treatment"] = 6
+                config_data = config.CONFIG
+                with open("config.py", "w") as config_file:
+                    config_file.write(f"CONFIG = {config_data}")
+                runpy.run_path("rectangles varying colors.py")
                 pygame.quit()
 
             if choice7_rect.collidepoint(pos):
-                runpy.run_path("C:\\Users\\Zeddrex Navarra\\Desktop\\Career\\Projects\\Memory Game\\Memory-Game\\larger hexes varying colors.py")
+                config.CONFIG["treatment"] = 7
+                config_data = config.CONFIG
+                with open("config.py", "w") as config_file:
+                    config_file.write(f"CONFIG = {config_data}")
+                runpy.run_path("larger hexes varying colors.py")
                 pygame.quit()
 
             if choice8_rect.collidepoint(pos):
-                runpy.run_path("C:\\Users\\Zeddrex Navarra\\Desktop\\Career\\Projects\\Memory Game\\Memory-Game\\larger rectangles varying colors.py")
+                config.CONFIG["treatment"] = 8
+                config_data = config.CONFIG
+                with open("config.py", "w") as config_file:
+                    config_file.write(f"CONFIG = {config_data}")
+                runpy.run_path("larger rectangles varying colors.py")
                 pygame.quit()
     
     pygame.display.update()
