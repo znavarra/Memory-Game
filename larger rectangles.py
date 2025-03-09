@@ -194,6 +194,7 @@ while run:
                             correct += 1
                         
                         if clicks != order[hex]:
+                            clicked[hex] = True
                             pygame.draw.polygon(screen,white,rectangles[hex])
 
                         if clicks == number:
@@ -204,6 +205,7 @@ while run:
                             print(correct)
                             round_score.append(correct)
                             next_round()
+                        print(clicks)
 
         if next_round_state == True:
 

@@ -253,6 +253,7 @@ while run:
                             correct += 1
                         
                         if clicks != order[hex]:
+                            clicked[hex] = True
                             pygame.draw.polygon(screen,white,hexes[hex])
 
                         if clicks == number:
