@@ -3,6 +3,13 @@ from pygame.locals import *
 import random
 import math
 import runpy
+import pandas as pd
+import config
+
+scores = pd.read_csv('scores.csv', header = 0)
+times = pd.read_csv('times.csv', header = 0)
+round_score = [config.CONFIG["unique_id"], config.CONFIG["treatment"]]
+time = [config.CONFIG["unique_id"], config.CONFIG["treatment"]]
 
 pygame.init()
 
@@ -30,7 +37,7 @@ score_rect = Rect(50,525,300,100)
 
 pygame.draw.rect(screen,white,game_screen_rect)
 
-time = []
+
 hexes = {}
 clicked = {}
 order = {}
@@ -138,7 +145,7 @@ def next_round():
 def timer():
     current_time = pygame.time.get_ticks()
     duration = current_time - start_time
-    ready_time = [duration,scored]
+    ready_time = duration
     time.append(ready_time)
     
 clicks = 0
@@ -161,7 +168,7 @@ while run:
     for event in pygame.event.get():
 
         if event.type == pygame.QUIT:
-            runpy.run_path("C:\\Users\\Zeddrex Navarra\\Desktop\\Career\\Projects\\Memory Game\\Memory-Game\\landing page.py")
+            runpy.run_path("user interface.py")
             run = False
 
         #if event.type == pygame.mouse.get_pressed()[0] == True:
@@ -202,6 +209,7 @@ while run:
                             number += 1
                             start_time = pygame.time.get_ticks()
                             print(correct)
+                            round_score.append(correct)
                             next_round()
 
         if next_round_state == True:
@@ -222,6 +230,13 @@ while run:
                 ready()
 
         if number == 21:
+            new_row = pd.DataFrame([round_score], columns = scores.columns)
+            file = pd.concat([scores,new_row], ignore_index = True)
+            file.to_csv('scores.csv', index = False)
+
+            new_time = pd.DataFrame([time], columns = times.columns)
+            file_time = pd.concat([times,new_time], ignore_index = True)
+            file_time.to_csv('times.csv', index = False)
             play_again()
 
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and game_over is True:
