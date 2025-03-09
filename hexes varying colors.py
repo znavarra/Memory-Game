@@ -157,17 +157,25 @@ def play_again():
     global game_over
     screen.fill(black)
     game_over_text = "Game Over"
-    final_score_text = f"Final Score: {scored}"
+    game_width, _ = game_over_font.size(game_over_text)
     game_over_img = game_over_font.render(game_over_text, True, red)
+    screen.blit(game_over_img, ((1000-game_width)/2,150))
+
+    final_score_text = f"Final Score: {scored}"
+    final_width, _ = game_over_font.size(final_score_text)
     final_score_img = game_over_font.render(final_score_text, True, red)
-    screen.blit(game_over_img, (310,150))
-    screen.blit(final_score_img, (273.5,225))
+    screen.blit(final_score_img, ((1000-final_width)/2,225))
 
 
     pygame.draw.rect(screen,red,play_again_rect)
-    play_again_text = "Play Again"
+    play_again_text = "Exit"
     play_again_img = play_again_font.render(play_again_text, True, black)
-    screen.blit(play_again_img, (395,530))
+    text_width, text_height = play_again_font.size(play_again_text)
+
+    text_x = play_again_rect.x + (play_again_rect.width - text_width) / 2
+    text_y = play_again_rect.y + (play_again_rect.height - text_height) / 2
+
+    screen.blit(play_again_img, (text_x, text_y))
     game_over = True
     
 
@@ -202,8 +210,9 @@ def next_round():
     screen.fill(black)
 
     strike_text = f"Correct: {correct}"
+    strike_width, _ = game_over_font.size(strike_text)
     strike_img = game_over_font.render(strike_text, True, red)
-    screen.blit(strike_img, (375,200))
+    screen.blit(strike_img, ((1000-strike_width)/2,200))
 
 def timer():
     current_time = pygame.time.get_ticks()
@@ -308,18 +317,19 @@ while run:
             pos = pygame.mouse.get_pos()
 
             if play_again_rect.collidepoint(pos):
-
-                screen.fill(black)
-                pygame.draw.rect(screen,white,game_screen_rect)
-                score(0)
-                number = 4
-                generate_polygons(number)
-                ready()
-                game_over = False
-                ready_click = False
-                strike_state = False
-                strike = 0
-                start_time = 0
+                runpy.run_path("user interface.py")
+                run = False
+                # screen.fill(black)
+                # pygame.draw.rect(screen,white,game_screen_rect)
+                # score(0)
+                # number = 4
+                # generate_polygons(number)
+                # ready()
+                # game_over = False
+                # ready_click = False
+                # strike_state = False
+                # strike = 0
+                # start_time = 0
     
 
     pygame.display.update()
