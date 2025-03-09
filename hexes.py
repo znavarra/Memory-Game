@@ -85,8 +85,18 @@ def generate_polygons(num):
         
         order[samp] = label #producing tile numbers
         label_text = f"{label}"
+        label_width, label_height = font.size(label_text)
+
+        # Compute the center of the shape
+        shape_x = sum([point[0] for point in hexes[samp]]) / len(hexes[samp])
+        shape_y = sum([point[1] for point in hexes[samp]]) / len(hexes[samp])
+
+        # Adjust the label position to center it
+        label_x = shape_x - (label_width / 2)
+        label_y = shape_y - (label_height / 2)
+
         label_img = font.render(label_text, True, green)
-        screen.blit(label_img, (hexes[samp][0][0] - 7, ((hexes[samp][1][1] + hexes[samp][2][1]) / 2) - 10))
+        screen.blit(label_img, (label_x, label_y+2))
         clicked[samp] = False
         label += 1
 
