@@ -131,8 +131,18 @@ def generate_polygons(number):
         order[samp] = label
         clicked[samp] = False
         label_text = f"{label}"
+        label_width, label_height = font.size(label_text)
+
+        # Compute the center of the shape
+        shape_x = sum([point[0] for point in rectangles[samp]]) / len(rectangles[samp])
+        shape_y = sum([point[1] for point in rectangles[samp]]) / len(rectangles[samp])
+
+        # Adjust the label position to center it
+        label_x = shape_x - (label_width / 2)
+        label_y = shape_y - (label_height / 2)
+
         label_img = font.render(label_text, True, white)
-        screen.blit(label_img, (rectangles[samp][0][0]+40, ((rectangles[samp][1][1] + rectangles[samp][2][1])/2) - 10))
+        screen.blit(label_img, (label_x, label_y+2))
         label += 1
 
 def play_again():
