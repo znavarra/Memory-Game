@@ -1,0 +1,1 @@
+CONFIG = {'unique_id': 'kendrickklduckworth', 'treatment': 8}
