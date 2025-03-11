@@ -19,7 +19,7 @@ screen = pygame.display.set_mode((width,height))
 
 blue = (0, 0, 255)
 red = (255, 0, 0)
-green = (0, 255, 0)
+green = (250,250,250)#(0, 255, 0)
 black = (0, 0 , 0)
 pink = (255, 16, 240)
 white = (250,250,250)
@@ -158,7 +158,7 @@ def next_round():
 
     strike_text = f"Correct: {correct}"
     strike_width, _ = game_over_font.size(strike_text)
-    strike_img = game_over_font.render(strike_text, True, red)
+    strike_img = game_over_font.render(strike_text, True, blue)
     screen.blit(strike_img, ((1000-strike_width)/2,200))
 
 def timer():
@@ -188,8 +188,9 @@ while run:
 
         if event.type == pygame.QUIT:
 
-            runpy.run_path("user interface.py")
-            run = False
+            number = 21
+            #runpy.run_path("user interface.py")
+            #run = False
 
         #if event.type == pygame.mouse.get_pressed()[0] == True:
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
@@ -250,11 +251,17 @@ while run:
                 generate_polygons(number)
                 ready()
 
-        if number == 21:
+        if number == 21 or event.type == pygame.QUIT:
+            missing = 19 - len(round_score)
+            for i in range(missing):
+                round_score.append('')
             new_row = pd.DataFrame([round_score], columns = scores.columns)
             file = pd.concat([scores,new_row], ignore_index = True)
             file.to_csv('scores.csv', index = False)
 
+            missing = 19 - len(time)
+            for i in range(missing):
+                time.append('')
             new_time = pd.DataFrame([time], columns = times.columns)
             file_time = pd.concat([times,new_time], ignore_index = True)
             file_time.to_csv('times.csv', index = False)
