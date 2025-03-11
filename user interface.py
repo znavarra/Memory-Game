@@ -12,11 +12,15 @@ base_font = pygame.font.Font(None, 40)
 label_font = pygame.font.Font(None, 50)
 done_font = pygame.font.Font(None, 100)
 
-color_active = pygame.Color('lightskyblue3')
-color_passive = pygame.Color('chartreuse4')
+color_active = (0, 128, 128)#pygame.Color('lightskyblue3')
+color_passive = (180, 200, 210)#pygame.Color('chartreuse4')
+indigo = (2,52,63)
+skin = (240,237,204)
+
+screen.fill(skin)
 
 done = pygame.Rect(400, 500, 300, 100)
-done_text = done_font.render("Done", True, (255, 255, 255))
+done_text = done_font.render("Done", True, skin)
 
 input_fields = [
     {"label": "Name:", "rect": pygame.Rect(400, 50, 300, 50), "text": "", "active": False},
@@ -29,7 +33,7 @@ input_fields = [
 run = True
 
 while run:
-    screen.fill((0, 0, 0))  
+    #screen.fill((0, 0, 0))  
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -84,7 +88,7 @@ while run:
         
 
 
-    pygame.draw.rect(screen, color_active, done)
+    pygame.draw.rect(screen, indigo, done)
     screen.blit(done_text, (done.x + 60, done.y + 17))
 
     for field in input_fields:
@@ -93,7 +97,7 @@ while run:
         label_width, _ = label_font.size(field["label"])
         label_x = field["rect"].x - (label_width + 10)
         
-        label_surface = label_font.render(field["label"], False, (255, 255, 255))
+        label_surface = label_font.render(field["label"], False, indigo)
         screen.blit(label_surface, (label_x, field["rect"].y + 5))
         
         input_surface = base_font.render(field["text"], True, (255, 255, 255))
