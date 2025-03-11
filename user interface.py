@@ -105,6 +105,17 @@ while run:
 
         field["rect"].w = max(300, input_surface.get_width() + 10)
 
+    for field in input_fields:
+        guide = {
+            "Year:" : "e.g. 1st, 2nd, etc.",
+            "Course:" : "e.g. BS Statistics",
+            "GCash:" : "Optional"
+        }
+        if field["text"] == '' and field["label"] in ('Year:','Course:','GCash:'):
+
+            input_surface = base_font.render(guide[field["label"]], True, skin)
+            screen.blit(input_surface, (field["rect"].x + 5, field["rect"].y + 10))
+
     pygame.display.flip()
 
 pygame.quit()
