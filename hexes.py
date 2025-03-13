@@ -251,7 +251,7 @@ while run:
                 generate_polygons(number)
                 ready()
 
-        if number == 21 or event.type == pygame.QUIT:
+        if number == 21:
             missing = 19 - len(round_score)
             for i in range(missing):
                 round_score.append('')
@@ -260,12 +260,18 @@ while run:
             file.to_csv('scores.csv', index = False)
 
             missing = 19 - len(time)
+            print(missing)
             for i in range(missing):
                 time.append('')
             new_time = pd.DataFrame([time], columns = times.columns)
             file_time = pd.concat([times,new_time], ignore_index = True)
             file_time.to_csv('times.csv', index = False)
+
+            info = pd.read_csv("info.csv", header = 0)
+            info.loc[info["unique_id"] == config.CONFIG["unique_id"], "score"] = scored
+            info.to_csv('info.csv', index = False)
             play_again()
+            number +=1
 
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and game_over is True:
             

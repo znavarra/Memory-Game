@@ -63,6 +63,7 @@ while run:
 
                 unique_id = name + email
                 data["unique_id"] = unique_id
+                data["score"] = 0
 
                 config_data = {
                     "unique_id" : unique_id
