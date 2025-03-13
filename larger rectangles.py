@@ -180,8 +180,7 @@ while run:
     for event in pygame.event.get():
 
         if event.type == pygame.QUIT:
-            runpy.run_path("user interface.py")
-            run = False
+            number = 21
 
         #if event.type == pygame.mouse.get_pressed()[0] == True:
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
@@ -244,14 +243,26 @@ while run:
                 ready()
 
         if number == 21:
+            missing = 19 - len(round_score)
+            for i in range(missing):
+                round_score.append('')
             new_row = pd.DataFrame([round_score], columns = scores.columns)
             file = pd.concat([scores,new_row], ignore_index = True)
             file.to_csv('scores.csv', index = False)
 
+            missing = 19 - len(time)
+            print(missing)
+            for i in range(missing):
+                time.append('')
             new_time = pd.DataFrame([time], columns = times.columns)
             file_time = pd.concat([times,new_time], ignore_index = True)
             file_time.to_csv('times.csv', index = False)
+
+            info = pd.read_csv("info.csv", header = 0)
+            info.loc[info["unique_id"] == config.CONFIG["unique_id"], "score"] = scored
+            info.to_csv('info.csv', index = False)
             play_again()
+            number +=1
 
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and game_over is True:
             
