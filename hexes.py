@@ -271,6 +271,7 @@ while run:
             info.loc[info["unique_id"] == config.CONFIG["unique_id"], "score"] = scored
             info.to_csv('info.csv', index = False)
             play_again()
+            next_round_state = False
             number +=1
 
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and game_over is True:
