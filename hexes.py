@@ -168,7 +168,7 @@ def timer():
     time.append(duration)
     
 clicks = 0
-start_time = 0
+start_time = pygame.time.get_ticks()
 current_time = 0
 run = True
 number = 4
