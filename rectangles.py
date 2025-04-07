@@ -19,7 +19,7 @@ screen = pygame.display.set_mode((width,height))
 
 blue = (0, 0, 255)
 red = (255, 0, 0)
-green = (0, 255, 0)
+green = (250,250,250)#(0, 255, 0)
 black = (0, 0 , 0)
 pink = (255, 16, 240)
 white = (250,250,250)
