@@ -123,6 +123,7 @@ def generate_polygons(number):
     correct = 0
     order = {}
     sample = []
+    random.seed(number)
     sample = random.sample(range(0,32), number)
 
     label = 1

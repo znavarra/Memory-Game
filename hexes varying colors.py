@@ -130,6 +130,7 @@ def generate_polygons(num):
     correct = 0
     order = {}
     sample = []
+    random.seed(number)
     sample = random.sample(range(0,43), num)
 
     label = 1
